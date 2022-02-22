@@ -1,7 +1,8 @@
 package search;
 
-public class BinarySearchMin{
+public class BinarySearchMin {
 
+    // :NOTE: Не ясно, кто такие i, j, f, k, l, какие у них диапазоны и каким кванторами они связаны
     /* Pred: i < j <= f => a[i] > a[j]
              f <= k < l => a[k] < a[l]
     */ 
@@ -36,9 +37,11 @@ public class BinarySearchMin{
         return a[l];
     }
 
+    // :NOTE: Есть подозрение что l в предусловии и аргумент l не имеют ничего общего
     /* Pred: i < j <= f => a[i] > a[j]
              f <= k < l => a[k] < a[l]
-    */ 
+    */
+    // :NOTE: Неформально
     // Post: R = min value of array
     public static int recursiveSearch(int[] a, int l, int r) {
         // Inv: (R <= a[l']) && (r' == a.length || R <= a[r']) && (l' <= index(R) < r')
@@ -64,6 +67,7 @@ public class BinarySearchMin{
             return recursiveSearch(a, m, r);
         }
     }
+
     /* Pred: i < j <= f => a[i] > a[j]
              f <= k < l => a[k] < a[l]
     */
