@@ -2,11 +2,11 @@ package search;
 
 public class BinarySearchMin {
 
-    // :NOTE: Не ясно, кто такие i, j, f, k, l, какие у них диапазоны и каким кванторами они связаны
-    /* Pred: i < j <= f => a[i] > a[j]
-             f <= k < l => a[k] < a[l]
+    // :NOTE: Не ясно, кто такие i, j, f, k, l, какие у них диапазоны и каким кванторами они связаны (исправлено)
+    /* Pred: The only one f: 0 <= i < j <= f: => arr[i] > arr[j] && 
+                             arr[f] <= arr[f+1] && (f + 1) <= ii < jj < arr.lenght: => arr[ii] < arr[jj]
     */ 
-    // Post: R = min value of array
+    // Post: for (int i = 0; i < arr.length; i++) R <= arr[i]
     public static int iterativeSearch(int[] a) {
         // (R <= a[0]) && (a.length == a.length || R <= a[a.length]) && (0 <= index(R) < a.length)
         int l = 0, r = a.length;
@@ -37,12 +37,12 @@ public class BinarySearchMin {
         return a[l];
     }
 
-    // :NOTE: Есть подозрение что l в предусловии и аргумент l не имеют ничего общего
-    /* Pred: i < j <= f => a[i] > a[j]
-             f <= k < l => a[k] < a[l]
+    // :NOTE: Есть подозрение что l в предусловии и аргумент l не имеют ничего общего (исправлено)
+    /* Pred: The only one f: 0 <= i < j <= f: => arr[i] > arr[j] && 
+                            arr[f] <= arr[f+1] && (f + 1) <= ii < jj < arr.lenght: => arr[ii] < arr[jj]
     */
-    // :NOTE: Неформально
-    // Post: R = min value of array
+    // :NOTE: Неформально (исправлено)
+    // Post: for (int i = 0; i < arr.length; i++) R <= arr[i]
     public static int recursiveSearch(int[] a, int l, int r) {
         // Inv: (R <= a[l']) && (r' == a.length || R <= a[r']) && (l' <= index(R) < r')
         if (r - l <= 1) {
@@ -68,8 +68,8 @@ public class BinarySearchMin {
         }
     }
 
-    /* Pred: i < j <= f => a[i] > a[j]
-             f <= k < l => a[k] < a[l]
+    /* Pred: The only one f: 0 <= i < j <= f: => arr[i] > arr[j] && 
+                            arr[f] <= arr[f+1] && (f + 1) <= ii < jj < arr.lenght: => arr[ii] < arr[jj]
     */
     public static void main(String[] args){
         int[] a = new int[args.length];
