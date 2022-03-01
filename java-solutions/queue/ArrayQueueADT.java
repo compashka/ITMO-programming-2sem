@@ -15,7 +15,7 @@ public class ArrayQueueADT {
         assert element != null;
         ensureCapasity(queue);
         queue.elements[queue.tail] = element;
-        queue.tail = (queue.tail + 1) % queue.elements.length;
+        queue.tail =(queue.tail + 1) % queue.elements.length;
         queue.size++;
     }
     
@@ -38,9 +38,9 @@ public class ArrayQueueADT {
     // Pred: size > 0
     // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
     public static Object remove(ArrayQueueADT queue) {
-        Object result = queue.elements[(queue.tail - 1 + queue.elements.length) % queue.elements.length];
-        queue.elements[(queue.tail - 1 + queue.elements.length) % queue.elements.length] = null;
-        queue.tail--;
+        queue.tail = (queue.tail - 1 + queue.elements.length) % queue.elements.length;
+        Object result = queue.elements[queue.tail];
+        queue.elements[queue.tail] = null;
         queue.size--;
         return result;
     }

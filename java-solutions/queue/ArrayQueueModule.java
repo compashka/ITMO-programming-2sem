@@ -38,9 +38,9 @@ public class ArrayQueueModule{
     // Pred: size > 0
     // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
     public static Object remove() {
-        Object result = elements[(tail - 1 + elements.length) % elements.length];
-        elements[(tail - 1 + elements.length) % elements.length] = null;
-        tail--;
+        tail = (tail - 1 + elements.length) % elements.length;
+        Object result = elements[tail];
+        elements[tail] = null;
         size--;
         return result;
     }
