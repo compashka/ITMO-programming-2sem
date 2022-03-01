@@ -1,7 +1,7 @@
 package queue;
 
-// Model: queue
-// Invariant: (head < i < tail || tail < i < head) => elements[i] != null
+// Model: q[0]..q[size - 1]
+// Invariant: for i=0..(size-1): q[i] != null
 
 public class ArrayQueue {
     private Object[] elements = new Object[16];
@@ -9,40 +9,34 @@ public class ArrayQueue {
     private int head = 0;
     private int size = 0;
 
-
-
-    // Pred: True
-    // Post: elements[tail++] = element, size' = size + 1
+    // Pred: element != null
+    // Post: size' = size + 1, for i = 0..(size - 1): q'[i] = q[i], q'[size' - 1] = element
     public void enqueue(Object element) {
-        if (element == null) {
-            return;
-        }
+        assert element != null;
         ensureCapasity();
         elements[tail] = element;
         tail = (tail + 1) % elements.length;
         size++;
     }
 
-    // Pred: True
-    // Post: elements[head--] = element, size' = size + 1
+    // Pred: element != null
+    // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
     public void push(Object element) {
-        if (element == null) {
-            return;
-        }
+        assert element != null;
         ensureCapasity();
         head = ((head - 1) + elements.length) % elements.length;
         elements[head] = element;
         size++;
     }
 
-    // Pred: True
-    // Post: R = elements[(tail - 1 + elements.length) % elements.length]
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public Object peek() {
         return elements[(tail - 1 + elements.length) % elements.length];
     }
 
-    // Pred: True
-    // Post: R = elements[(tail - 1 + elements.length) % elements.length] && size' = size - 1
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
     public Object remove() {
         Object result = elements[(tail - 1 + elements.length) % elements.length];
         elements[(tail - 1 + elements.length) % elements.length] = null;
@@ -52,8 +46,9 @@ public class ArrayQueue {
     }
 
     // Pred: element != null
-    // Post: R = number(element)
+    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public int count(Object element) {
+        assert element != null;
         int res = 0;
         for (Object obj:elements) {
             if (element.equals(obj)) {
@@ -65,7 +60,8 @@ public class ArrayQueue {
 
 
     // Pred: True
-    // Post: (size >= elements.length && elements.length' = length * 2 && tail' = size && head' = 0)
+    /* Post: if (size >= capasity) => capasity' = capasity * 2, size' = size, 
+                                          for i = 0..(size - 1): q'[i] = q[i]*/
     private void ensureCapasity() {
         if (size >= elements.length) {
             Object[] newElements = new Object[elements.length * 2];
@@ -77,18 +73,15 @@ public class ArrayQueue {
         }
     }
 
-    // Pred: True
-    // Post: R = element[head]
+    // Pred: size > 0
+    // Post: R = q[0], size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public Object element() {
         return elements[head];
     }
 
-    // Pred: true
-    // Post: R = elements[head] && size' = size - 1 && head' = (head + 1) % elements.length
+    // Pred: size > 0
+    // Post: R = q[0], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i + 1]
     public Object dequeue() {
-        if (size < 1) {
-            return null;
-        }
         Object result = elements[head];
         elements[head] = null;
         head = (head + 1) % elements.length;
@@ -97,19 +90,19 @@ public class ArrayQueue {
     }
 
     // Pred: True
-    // Post: R = size
+    // Post: R = size, size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public int size() {
         return size;
     }
 
     // Pred: True
-    // Post: R = (size == 0)
+    // Post: R = (size == 0), size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public Boolean isEmpty() {
         return size == 0;
     }
 
     // Pred: True
-    // Post: for i=0..elements.length, elements[i] = null
+    // Post: for i = 0..(size - 1): q'[i] = null, size' = 0
     public void clear() {
         for (int i = head; i < head + size; i++) {
             i = (i % elements.length);
