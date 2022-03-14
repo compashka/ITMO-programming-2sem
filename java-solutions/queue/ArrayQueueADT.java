@@ -1,13 +1,14 @@
 package queue;
 
+import java.util.Arrays;
 // Model: q[0]..q[size - 1]
 // Invariant: for i=0..(size-1): q[i] != null
 
 public class ArrayQueueADT {
-    private Object[] elements = new Object[16];
-    private int tail = 0;
-    private int head = 0;
-    private int size = 0;
+    private Object[] elements = new Object[2];
+    private int tail;
+    private int head;
+    private int size;
 
     // Pred: element != null
     // Post: size' = size + 1, for i = 0..(size - 1): q'[i] = q[i], q'[size' - 1] = element
@@ -19,48 +20,6 @@ public class ArrayQueueADT {
         queue.size++;
     }
     
-    // Pred: element != null
-    // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
-    public static void push(ArrayQueueADT queue, Object element) {
-        assert element != null;
-        ensureCapasity(queue);
-        queue.head = ((queue.head - 1) + queue.elements.length) % queue.elements.length;
-        queue.elements[queue.head] = element;
-        queue.size++;
-    }
-
-    // Pred: size > 0
-    // Post: R = q[size - 1], size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public static Object peek(ArrayQueueADT queue) {
-        return queue.elements[(queue.tail - 1 + queue.elements.length) % queue.elements.length];
-    }
-
-    // Pred: size > 0
-    // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
-    public static Object remove(ArrayQueueADT queue) {
-        queue.tail = (queue.tail - 1 + queue.elements.length) % queue.elements.length;
-        Object result = queue.elements[queue.tail];
-        queue.elements[queue.tail] = null;
-        queue.size--;
-        return result;
-    }
-
-    // Pred: element != null
-    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public static int count(ArrayQueueADT queue, Object element) {
-        assert element != null;
-        int res = 0;
-        for (Object obj:queue.elements) {
-            if (element.equals(obj)) {
-                res++;
-            }
-        }
-        return res;
-    }
-
-    // Pred: True
-    /* Post: if (size >= capasity) => capasity' = capasity * 2, size' = size, 
-                                          for i = 0..(size - 1): q'[i] = q[i]*/
     static private void ensureCapasity(ArrayQueueADT queue) {
         if (queue.size >= queue.elements.length) {
             Object[] newElements = new Object[queue.elements.length * 2];
@@ -107,13 +66,47 @@ public class ArrayQueueADT {
     // Pred: True
     // Post: for i = 0..(size - 1): q'[i] = null, size' = 0
     static public void clear(ArrayQueueADT queue) {
-        for (int i = queue.head; i < queue.head + queue.size; i++) {
-            i = (i % queue.elements.length);
-            queue.elements[i] = null;
+        Arrays.fill(queue.elements, null);
+        queue.size = queue.head = queue.tail = 0;
+    }
+
+    // Pred: element != null
+    // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
+    public static void push(ArrayQueueADT queue, Object element) {
+        assert element != null;
+        ensureCapasity(queue);
+        queue.head = ((queue.head - 1) + queue.elements.length) % queue.elements.length;
+        queue.elements[queue.head] = element;
+        queue.size++;
+    }
+
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    public static Object peek(ArrayQueueADT queue) {
+        return queue.elements[(queue.tail - 1 + queue.elements.length) % queue.elements.length];
+    }
+
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
+    public static Object remove(ArrayQueueADT queue) {
+        queue.tail = (queue.tail - 1 + queue.elements.length) % queue.elements.length;
+        Object result = queue.elements[queue.tail];
+        queue.elements[queue.tail] = null;
+        queue.size--;
+        return result;
+    }
+
+    // Pred: element != null
+    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    public static int count(ArrayQueueADT queue, Object element) {
+        assert element != null;
+        int res = 0;
+        for (Object obj:queue.elements) {
+            if (element.equals(obj)) {
+                res++;
+            }
         }
-        queue.head = 0;
-        queue.tail = 0;
-        queue.size = 0;
+        return res;
     }
 }
 

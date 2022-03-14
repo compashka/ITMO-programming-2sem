@@ -1,13 +1,14 @@
 package queue;
 
+import java.util.Arrays;
 // Model: q[0]..q[size - 1]
 // Invariant: for i=0..(size-1): q[i] != null
 
 public class ArrayQueueModule{
-    private static Object[] elements = new Object[16];
-    private static int tail = 0;
-    private static int head = 0;
-    private static int size = 0;
+    private static Object[] elements = new Object[2];
+    private static int tail;
+    private static int head;
+    private static int size;
 
     // Pred: element != null
     // Post: size' = size + 1, for i = 0..(size - 1): q'[i] = q[i], q'[size' - 1] = element
@@ -19,48 +20,6 @@ public class ArrayQueueModule{
         size++;
     }
 
-    // Pred: element != null
-    // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
-    public static void push(Object element) {
-        assert element != null;
-        ensureCapasity();
-        head = ((head - 1) + elements.length) % elements.length;
-        elements[head] = element;
-        size++;
-    }
-
-    // Pred: size > 0
-    // Post: R = q[size - 1], size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public static Object peek() {
-        return elements[(tail - 1 + elements.length) % elements.length];
-    }
-
-    // Pred: size > 0
-    // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
-    public static Object remove() {
-        tail = (tail - 1 + elements.length) % elements.length;
-        Object result = elements[tail];
-        elements[tail] = null;
-        size--;
-        return result;
-    }
-
-    // Pred: element != null
-    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public static int count(Object element) {
-        assert element != null;
-        int res = 0;
-        for (Object obj:elements) {
-            if (element.equals(obj)) {
-                res++;
-            }
-        }
-        return res;
-    }
-
-    // Pred: True
-    /* Post: if (size >= capasity) => capasity' = capasity * 2, size' = size, 
-                                          for i = 0..(size - 1): q'[i] = q[i]*/
     static private void ensureCapasity() {
         if (size >= elements.length) {
             Object[] newElements = new Object[elements.length * 2];
@@ -103,12 +62,46 @@ public class ArrayQueueModule{
     // Pred: True
     // Post: for i = 0..(size - 1): q'[i] = null, size' = 0
     static public void clear() {
-        for (int i = head; i < head + size; i++) {
-            i = (i % elements.length);
-            elements[i] = null;
+        Arrays.fill(elements, null);
+        size = head = tail = 0;
+    }
+
+    // Pred: element != null
+    // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
+    public static void push(Object element) {
+        assert element != null;
+        ensureCapasity();
+        head = ((head - 1) + elements.length) % elements.length;
+        elements[head] = element;
+        size++;
+    }
+
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    public static Object peek() {
+        return elements[(tail - 1 + elements.length) % elements.length];
+    }
+
+    // Pred: size > 0
+    // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
+    public static Object remove() {
+        tail = (tail - 1 + elements.length) % elements.length;
+        Object result = elements[tail];
+        elements[tail] = null;
+        size--;
+        return result;
+    }
+
+    // Pred: element != null
+    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    public static int count(Object element) {
+        assert element != null;
+        int res = 0;
+        for (Object obj:elements) {
+            if (element.equals(obj)) {
+                res++;
+            }
         }
-        size = 0;
-        head = 0;
-        tail = 0;
+        return res;
     }
 }

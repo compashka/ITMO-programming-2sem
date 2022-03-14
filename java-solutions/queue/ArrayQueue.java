@@ -1,22 +1,63 @@
 package queue;
 
-// Model: q[0]..q[size - 1]
-// Invariant: for i=0..(size-1): q[i] != null
+import java.util.Arrays;
 
-public class ArrayQueue {
-    private Object[] elements = new Object[16];
-    private int tail = 0;
-    private int head = 0;
-    private int size = 0;
+public class ArrayQueue extends AbstractQueue {
+    private Object[] elements;
+    private int tail;
+    private int head;
 
-    // Pred: element != null
-    // Post: size' = size + 1, for i = 0..(size - 1): q'[i] = q[i], q'[size' - 1] = element
-    public void enqueue(Object element) {
-        assert element != null;
+    public ArrayQueue(){
+        elements = new Object[2];
+    }
+
+    public ArrayQueue(int length){
+        elements = new Object[length];
+    }
+
+    @Override
+    protected void enqueueImpl(Object element) {
         ensureCapasity();
         elements[tail] = element;
         tail = (tail + 1) % elements.length;
-        size++;
+    }
+
+    private void ensureCapasity() {
+        if (size >= elements.length) {
+            Object[] newElements = new Object[elements.length * 2];
+            System.arraycopy(elements, head, newElements, 0, size - head);
+            System.arraycopy(elements, 0, newElements, size - head, head);
+            elements = newElements;
+            tail = size;
+            head = 0; 
+        }
+    }
+
+    @Override
+    protected Object elementImpl() {
+        return elements[head];
+    }
+
+    @Override
+    public void dequeueImpl() {
+        elements[head] = null;
+        head = (head + 1) % elements.length;
+    }
+
+    @Override
+    protected void clearImpl() {
+        Arrays.fill(elements, null);
+        head = tail = 0;
+    }
+
+    @Override
+    protected ArrayQueue createCopy() {
+        ArrayQueue result = new ArrayQueue(elements.length);
+        result.head = head;
+        result.tail = tail;
+        result.size = size;
+        System.arraycopy(elements, 0, result.elements, 0, elements.length);
+        return result;
     }
 
     // Pred: element != null
@@ -56,60 +97,5 @@ public class ArrayQueue {
             }
         }
         return res;
-    }
-
-
-    // Pred: True
-    /* Post: if (size >= capasity) => capasity' = capasity * 2, size' = size, 
-                                          for i = 0..(size - 1): q'[i] = q[i]*/
-    private void ensureCapasity() {
-        if (size >= elements.length) {
-            Object[] newElements = new Object[elements.length * 2];
-            System.arraycopy(elements, head, newElements, 0, size - head);
-            System.arraycopy(elements, 0, newElements, size - head, head);
-            elements = newElements;
-            tail = size;
-            head = 0; 
-        }
-    }
-
-    // Pred: size > 0
-    // Post: R = q[0], size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public Object element() {
-        return elements[head];
-    }
-
-    // Pred: size > 0
-    // Post: R = q[0], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i + 1]
-    public Object dequeue() {
-        Object result = elements[head];
-        elements[head] = null;
-        head = (head + 1) % elements.length;
-        size--;
-        return result;
-    }
-
-    // Pred: True
-    // Post: R = size, size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public int size() {
-        return size;
-    }
-
-    // Pred: True
-    // Post: R = (size == 0), size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public Boolean isEmpty() {
-        return size == 0;
-    }
-
-    // Pred: True
-    // Post: for i = 0..(size - 1): q'[i] = null, size' = 0
-    public void clear() {
-        for (int i = head; i < head + size; i++) {
-            i = (i % elements.length);
-            elements[i] = null;
-        }
-        head = 0;
-        tail = 0;
-        size = 0;
     }
 }
