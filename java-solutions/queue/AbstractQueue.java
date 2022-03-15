@@ -17,7 +17,7 @@ public abstract class AbstractQueue implements Queue {
     }
 
     @Override
-    public void enqueue(Object element){
+    public void enqueue(final Object element){
         assert element != null;
         enqueueImpl(element);
         size++;
@@ -32,7 +32,7 @@ public abstract class AbstractQueue implements Queue {
 
     @Override
     public Object dequeue() {
-        Object result = element();
+        final Object result = element();
         dequeueImpl();
         size--;
         return result;
@@ -49,10 +49,10 @@ public abstract class AbstractQueue implements Queue {
     protected abstract Queue createCopy();
 
     @Override
-    public Queue filter(Predicate<Object> predicate) {
-        Queue result = createCopy();
+    public Queue filter(final Predicate<Object> predicate) {
+        final Queue result = createCopy();
         for (int i = 0; i < size; i++) {
-            Object temp = result.dequeue();
+            final Object temp = result.dequeue();
             if (predicate.test(temp)) {
                 result.enqueue(temp);
             }
@@ -61,8 +61,8 @@ public abstract class AbstractQueue implements Queue {
     }
 
     @Override
-    public Queue map(Function<Object, Object> function) {
-        Queue result = createCopy();
+    public Queue map(final Function<Object, Object> function) {
+        final Queue result = createCopy();
         for (int i = 0; i < size; i++) {
             result.enqueue(function.apply(result.dequeue()));
         }

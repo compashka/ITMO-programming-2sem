@@ -5,7 +5,7 @@ public class LinkedQueue extends AbstractQueue {
     private Node head;
 
     @Override
-    protected void enqueueImpl(Object element) {
+    protected void enqueueImpl(final Object element) {
         Node.next(tail, tail = new Node(element));
         if (size == 0) {
             head = tail;
@@ -29,7 +29,7 @@ public class LinkedQueue extends AbstractQueue {
 
     @Override
     protected LinkedQueue createCopy() {
-        LinkedQueue result = new LinkedQueue();
+        final LinkedQueue result = new LinkedQueue();
         Node temp = head;
         while (temp != null) {
             result.enqueue(temp.element);
@@ -42,10 +42,11 @@ public class LinkedQueue extends AbstractQueue {
         private Object element;
         private Node next; 
     
-        public Node(Object element) {
+        public Node(final Object element) {
             this.element = element;
         }
-        public static void next(Node current, Node next){
+
+        public static void next(final Node current, final Node next){
             if (current != null) {
                 current.next = next;
             }

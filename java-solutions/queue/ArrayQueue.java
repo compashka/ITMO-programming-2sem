@@ -11,12 +11,12 @@ public class ArrayQueue extends AbstractQueue {
         elements = new Object[2];
     }
 
-    public ArrayQueue(int length){
+    public ArrayQueue(final int length){
         elements = new Object[length];
     }
 
     @Override
-    protected void enqueueImpl(Object element) {
+    protected void enqueueImpl(final Object element) {
         ensureCapasity();
         elements[tail] = element;
         tail = (tail + 1) % elements.length;
@@ -24,7 +24,7 @@ public class ArrayQueue extends AbstractQueue {
 
     private void ensureCapasity() {
         if (size >= elements.length) {
-            Object[] newElements = new Object[elements.length * 2];
+            final Object[] newElements = new Object[elements.length * 2];
             System.arraycopy(elements, head, newElements, 0, size - head);
             System.arraycopy(elements, 0, newElements, size - head, head);
             elements = newElements;
@@ -52,7 +52,7 @@ public class ArrayQueue extends AbstractQueue {
 
     @Override
     protected ArrayQueue createCopy() {
-        ArrayQueue result = new ArrayQueue(elements.length);
+        final ArrayQueue result = new ArrayQueue(elements.length);
         result.head = head;
         result.tail = tail;
         result.size = size;
@@ -62,7 +62,7 @@ public class ArrayQueue extends AbstractQueue {
 
     // Pred: element != null
     // Post: size' = size + 1, for i = 0..(size - 1): q'[i + 1] = q[i], q'[0] = element
-    public void push(Object element) {
+    public void push(final Object element) {
         assert element != null;
         ensureCapasity();
         head = ((head - 1) + elements.length) % elements.length;
@@ -80,18 +80,19 @@ public class ArrayQueue extends AbstractQueue {
     // Post: R = q[size - 1], size' = size - 1, for i = 0..(size - 2): q'[i] = q[i]
     public Object remove() {
         tail = (tail - 1 + elements.length) % elements.length;
-        Object result = elements[tail];
+        final Object result = elements[tail];
         elements[tail] = null;
         size--;
         return result;
     }
 
+    // :NOTE: Неформально
     // Pred: element != null
     // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
-    public int count(Object element) {
+    public int count(final Object element) {
         assert element != null;
         int res = 0;
-        for (Object obj:elements) {
+        for (final Object obj:elements) {
             if (element.equals(obj)) {
                 res++;
             }
