@@ -32,7 +32,8 @@ public interface Queue {
 
     // :NOTE: Неформально
     // Pred: True
-    // Post: size' <= size, for i = 0..(size' - 1): predicate.test(q'[i]) = true, number_invers(q', q) = 0
+    // Post: size' <= size, 0 <= i < size, 0 <= j < size', 0 <= i_j < size
+    //                     for j: 0..size'-1 predicate.test(q'[j]) && i_j < i_(j+1)
     Queue filter(Predicate<Object> predicate);
 
     // Pred: True

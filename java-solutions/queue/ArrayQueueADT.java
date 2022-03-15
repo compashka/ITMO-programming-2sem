@@ -3,6 +3,7 @@ package queue;
 import java.util.Arrays;
 // Model: q[0]..q[size - 1]
 // Invariant: for i=0..(size-1): q[i] != null
+// In every method queue != null
 
 public class ArrayQueueADT {
     private Object[] elements = new Object[2];
@@ -11,7 +12,7 @@ public class ArrayQueueADT {
     private int size;
 
     // :NOTE: null
-    // Pred: element != null
+    // Pred: element != null, queue != null
     // Post: size' = size + 1, for i = 0..(size - 1): q'[i] = q[i], q'[size' - 1] = element
     public static void enqueue(final ArrayQueueADT queue, final Object element) {
         assert element != null;
