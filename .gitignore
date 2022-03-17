@@ -12,3 +12,6 @@ _*
 
 # Do not store .jar files(usually tests)
 *.jar
+
+# Do not store .iml files(ide things)
+*.iml

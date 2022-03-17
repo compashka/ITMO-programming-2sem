@@ -88,7 +88,7 @@ public class ArrayQueue extends AbstractQueue {
 
     // :NOTE: Неформально
     // Pred: element != null
-    // Post: R = |S|, S = {i = 0..size-1, q[i] = element}, size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    // Post: R = |S|, S = {i = 0..(size - 1), q[i] = element}, size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public int count(final Object element) {
         assert element != null;
         int res = 0;

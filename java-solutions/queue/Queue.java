@@ -31,12 +31,14 @@ public interface Queue {
     void clear();
 
     // :NOTE: Неформально
-    // Pred: True
-    // Post: size' <= size, 0 <= i < size, 0 <= j < size', 0 <= i_j < size
-    //                     for j: 0..size'-1 predicate.test(q'[j]) && i_j < i_(j+1)
+    /* Pred: True
+       Post: R = q', size' <= size
+         for all i < j: 0..(size' - 1) exist k < l: 0..(size - 1): q'[i] = q[k] && q'[j] = q[l] &&
+         for all a < b: 0..(size - 1) exist c < d: 0..(size' - 1): q[a] = q'[c] && q[b] = q'[d] &&
+         for all f: 0..(size' - 1) predicate.test(q'[f]) = true                                 */
     Queue filter(Predicate<Object> predicate);
 
     // Pred: True
-    // Post: size' = size, for i = 0..(size' - 1): q'[i] = function.apply(q[i])
+    // Post: R = q', size' = size, for i = 0..(size' - 1): q'[i] = function.apply(q[i])
     Queue map(Function<Object, Object> function);
 }

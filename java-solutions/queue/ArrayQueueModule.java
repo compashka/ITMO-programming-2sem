@@ -4,7 +4,7 @@ import java.util.Arrays;
 // Model: q[0]..q[size - 1]
 // Invariant: for i=0..(size-1): q[i] != null
 
-public class ArrayQueueModule{
+public class ArrayQueueModule {
     private static Object[] elements = new Object[2];
     private static int tail;
     private static int head;
@@ -27,7 +27,7 @@ public class ArrayQueueModule{
             System.arraycopy(elements, 0, newElements, size - head, head);
             elements = newElements;
             tail = size;
-            head = 0;  
+            head = 0;
         }
     }
 
@@ -93,11 +93,11 @@ public class ArrayQueueModule{
     }
 
     // Pred: element != null
-    // Post: R = number_of(element), size' = size, for i = 0..(size - 1): q'[i] = q[i]
+    // Post: R = |S|, S = {i = 0..(size - 1), q[i] = element}, size' = size, for i = 0..(size - 1): q'[i] = q[i]
     public static int count(Object element) {
         assert element != null;
         int res = 0;
-        for (Object obj:elements) {
+        for (Object obj : elements) {
             if (element.equals(obj)) {
                 res++;
             }

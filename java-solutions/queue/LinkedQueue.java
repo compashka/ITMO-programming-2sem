@@ -39,7 +39,7 @@ public class LinkedQueue extends AbstractQueue {
     }
     
     private static class Node {
-        private Object element;
+        private final Object element;
         private Node next; 
     
         public Node(final Object element) {
