@@ -34,8 +34,9 @@ public interface Queue {
     /* Pred: True
        Post: R = q', size' <= size
          for all i < j: 0..(size' - 1) exist k < l: 0..(size - 1): q'[i] = q[k] && q'[j] = q[l] &&
-         for all a < b: 0..(size - 1) exist c < d: 0..(size' - 1): q[a] = q'[c] && q[b] = q'[d] &&
-         for all f: 0..(size' - 1) predicate.test(q'[f]) = true                                 */
+         for all a < b: (pred.test(q[a]) && pred.test(q[b]) = true): 0..(size - 1) exist c < d: 0..(size' - 1):
+                                                                                q[a] = q'[c] && q[b] = q'[d] &&
+         for all f: 0..(size' - 1) pred.test(q'[f]) = true                                 */
     Queue filter(Predicate<Object> predicate);
 
     // Pred: True
