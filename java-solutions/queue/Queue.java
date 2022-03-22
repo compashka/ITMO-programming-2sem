@@ -37,6 +37,7 @@ public interface Queue {
          for all a < b (pred.test(q[a]) && pred.test(q[b]) = true): 0..(size - 1) exist c < d: 0..(size' - 1):
                                                                                 q[a] = q'[c] && q[b] = q'[d] &&
          for all f: 0..(size' - 1) pred.test(q'[f]) = true                                 */
+    // :NOTE: [1, 2, 1] -> [1, 1, 1]
     Queue filter(Predicate<Object> predicate);
 
     // Pred: True
