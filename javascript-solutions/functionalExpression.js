@@ -22,9 +22,11 @@ const operationNames = {
     "abs": [abs, 1],
 };
 
+const pi = cnst(Math.PI)
+const e = cnst(Math.E)
 const constNames = {
-    "pi": cnst(Math.PI),
-    "e": cnst(Math.E)
+    "pi": pi,
+    "e": e
 };
 
 const varNames = {
