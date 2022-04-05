@@ -9,10 +9,11 @@ const subtract = operation((x, y) => x - y);
 const multiply = operation((x, y) => x * y);
 const divide = operation((x, y) => x / y);
 const negate = operation(x => -x);
-const iff = operation((x, y, z) => (x >= 0) ? y : z)
-const abs = operation(Math.abs)
+const iff = operation((x, y, z) => (x >= 0) ? y : z);
+const abs = operation(Math.abs);
 
 const operationNames = {
+    // :NOTE: F.length
     "+": [add, 2],
     "-": [subtract, 2],
     "*": [multiply, 2],
@@ -22,8 +23,8 @@ const operationNames = {
     "abs": [abs, 1],
 };
 
-const pi = cnst(Math.PI)
-const e = cnst(Math.E)
+const pi = cnst(Math.PI);
+const e = cnst(Math.E);
 const constNames = {
     "pi": pi,
     "e": e
