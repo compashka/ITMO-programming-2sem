@@ -79,6 +79,8 @@ function makeOperation(operand, operation, diffFunc) {
 let E = new Const(Math.E);
 let One = new Const(1);
 
+// :NOTE: Предварительно дифф.
+// (a, b, da, db)
 const Negate = makeOperation("negate", a => -a,
     (diffVar, a) => new Negate(a.diff(diffVar)));
 const Add = makeOperation("+", (a, b) => a + b,
