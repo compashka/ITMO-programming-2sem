@@ -62,7 +62,7 @@ createPrototype(Operation,
         return this.args.join(" ") + " " + this.operand
     },
     function (diffVar) {
-        return this.diffFunc(diffVar, ...(this.args.concat(this.args.map(x => x.diff(diffVar)))))
+        return this.diffFunc(...(this.args.concat(this.args.map(x => x.diff(diffVar)))))
     }
 );
 
@@ -82,21 +82,21 @@ let One = new Const(1);
 // :NOTE: Предварительно дифф.
 // (a, b, da, db)
 const Negate = makeOperation("negate", a => -a,
-    (diffVar, a, da, db) => new Negate(da));
+    (a, da) => new Negate(da));
 const Add = makeOperation("+", (a, b) => a + b,
-    (diffVar, a, b, da, db) => new Add(da, db));
+    (a, b, da, db) => new Add(da, db));
 const Subtract = makeOperation("-", (a, b) => a - b,
-    (diffVar, a, b, da, db) => new Subtract(da, db));
+    (a, b, da, db) => new Subtract(da, db));
 const Multiply = makeOperation("*", (a, b) => a * b,
-    (diffVar, a, b, da, db) => new Add(new Multiply(da, b), new Multiply(a, db)));
+    (a, b, da, db) => new Add(new Multiply(da, b), new Multiply(a, db)));
 const Divide = makeOperation("/", (a, b) => a / b,
-    (diffVar, a, b, da, db) => new Divide(
+    (a, b, da, db) => new Divide(
         new Subtract(new Multiply(da, b), new Multiply(a, db)), new Multiply(b, b)));
 const Pow = makeOperation("pow", (a, b) => Math.pow(a, b),
-    (diffVar, a, b, da, db) => new Multiply(new Pow(a, new Subtract(b, One)),
+    (a, b, da, db) => new Multiply(new Pow(a, new Subtract(b, One)),
         new Add(new Multiply(b, da), new Multiply(new Multiply(a, new Log(E, a)), db))));
 const Log = makeOperation("log", (a, b) => Math.log(Math.abs(b)) / Math.log(Math.abs(a)),
-    (diffVar, a, b, da, db) => new Divide(new Subtract(new Divide(new Multiply(new Log(E, a), db), b),
+    (a, b, da, db) => new Divide(new Subtract(new Divide(new Multiply(new Log(E, a), db), b),
         new Divide(new Multiply(new Log(E, b), da), a)), new Multiply(new Log(E, a), new Log(E, a))));
 const Min3 = makeOperation("min3", (a, b, c) => Math.min(a, b, c));
 const Max5 = makeOperation("max5", (a, b, c, d, e) => Math.max(a, b, c, d, e));
