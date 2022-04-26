@@ -243,6 +243,7 @@ function BaseParser(source, mode) {
     return {
         parse: function () {
             let result;
+            // :NOTE: Дубль
             if (source.test('(')) {
                 result = this.parseExpression();
                 source.expect(')');
@@ -258,6 +259,7 @@ function BaseParser(source, mode) {
         },
 
         parseExpression: function () {
+            // :NOTE: Упростить
             let operator = (mode === 'prefix') ? this.parseOperator() : this.parseArguments();
             let args = (mode === 'prefix') ? this.parseArguments() : this.parseOperator();
             if (mode === 'postfix') [operator, args] = [args, operator];
@@ -272,7 +274,7 @@ function BaseParser(source, mode) {
             let args = [];
             while (!source.isEOF()) {
                 if (source.current() in varsList) {
-                    args.push((new Variable(source.next())));
+                    args.push(new Variable(source.next()));
                 } else if (isFinite(source.current())) {
                     args.push(new Const(source.next()));
                 } else if (source.test('(')) {
