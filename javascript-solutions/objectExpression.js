@@ -177,7 +177,7 @@ function parse(expression) {
 
 const ParserError = function (position, errorMessage) {
     this.message = `Parser error at position: ${position}: ${errorMessage} `;
-}
+};
 ParserError.prototype = Object.create(Error.prototype);
 ParserError.prototype.name = "ParserError";
 ParserError.prototype.constructor = ParserError;
@@ -203,7 +203,7 @@ class MissingBracketError extends ParserError {
 class ArityOperationError extends ParserError {
     constructor(position, foundLength, expectLength, operand) {
         let messageError = (expectLength === undefined) ? `Expected not ${foundLength} arguments for operation`
-            : `Expected ${expectLength} arguments for operation '${operand}', but found ${foundLength}`
+            : `Expected ${expectLength} arguments for operation '${operand}', but found ${foundLength}`;
         super(position, messageError);
     }
 }
@@ -243,6 +243,7 @@ function BaseParser(source, mode) {
     return {
         parse: function () {
             let result;
+            // :NOTE: Дубль
             if (source.test('(')) {
                 result = this.parseExpression();
                 source.expect(')');
@@ -258,9 +259,10 @@ function BaseParser(source, mode) {
         },
 
         parseExpression: function () {
+            // :NOTE: Упростить
             let operator = (mode === 'prefix') ? this.parseOperator() : this.parseArguments();
             let args = (mode === 'prefix') ? this.parseArguments() : this.parseOperator();
-            if (mode === 'postfix') [operator, args] = [args, operator]
+            if (mode === 'postfix') [operator, args] = [args, operator];
             return (args.length === operator.opLength || operator.opLength === 0) ? new operator(...args) :
                 this.error(ArityOperationError, source.position, args.length, operator.opLength, operator.operand)
         },
@@ -272,7 +274,7 @@ function BaseParser(source, mode) {
             let args = [];
             while (!source.isEOF()) {
                 if (source.current() in varsList) {
-                    args.push((new Variable(source.next())));
+                    args.push(new Variable(source.next()));
                 } else if (isFinite(source.current())) {
                     args.push(new Const(source.next()));
                 } else if (source.test('(')) {
@@ -290,10 +292,6 @@ function BaseParser(source, mode) {
     }
 }
 
-function parsePrefix(input) {
-    return BaseParser(CharSource(input), 'prefix').parse();
-}
-
-function parsePostfix(input) {
-    return BaseParser(CharSource(input), 'postfix').parse();
-}
+// :NOTE: 'prefix' -> const
+const parsePrefix = input => BaseParser(CharSource(input), 'prefix').parse();
+const parsePostfix = input => BaseParser(CharSource(input), 'postfix').parse();
