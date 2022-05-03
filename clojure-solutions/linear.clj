@@ -14,7 +14,7 @@
   (or
     (vector-correct? x)
     (number? x)
-    (and (= (range (count x) 0 -1) (mapv count x)) (every? simplex-correct? x))
+    (and (every? simplex-correct? x) (= (range (count x) 0 -1) (mapv count x)))
     ))
 
 (defn reverse-args [f] (fn [a b] (f b a)))
